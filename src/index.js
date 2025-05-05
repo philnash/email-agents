@@ -2,6 +2,8 @@ import Fastify from "fastify";
 import helmet from "@fastify/helmet";
 import cors from "@fastify/cors";
 import rateLimit from "@fastify/rate-limit";
+import cookie from "@fastify/cookie";
+import session from "@fastify/session";
 import apiRoutes from "./routes/api.js";
 
 // Create Fastify instance
@@ -35,6 +37,25 @@ async function registerPlugins() {
   await server.register(rateLimit, {
     max: 100, // Maximum 100 requests
     timeWindow: "1 minute", // Per minute
+  });
+
+  // Register cookie support
+  await server.register(cookie);
+
+  // Register session support with cookies
+  await server.register(session, {
+    cookieName: "sessionId",
+    secret:
+      process.env.COOKIE_SECRET ||
+      "a-secret-with-minimum-length-of-32-characters",
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: 86400000, // 24 hours in milliseconds
+    },
+    saveUninitialized: false,
+    rolling: true, // Keep session alive when interacting with server
   });
 }
 
