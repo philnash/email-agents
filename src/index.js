@@ -1,0 +1,93 @@
+import Fastify from "fastify";
+import helmet from "@fastify/helmet";
+import cors from "@fastify/cors";
+import rateLimit from "@fastify/rate-limit";
+import apiRoutes from "./routes/api.js";
+
+// Create Fastify instance
+const server = Fastify({
+  logger: true,
+  trustProxy: process.env.NODE_ENV === "production", // Trust proxy headers if in production
+});
+
+// Register security plugins
+async function registerPlugins() {
+  // Add security headers
+  await server.register(helmet, {
+    // Customize CSP as needed for your application
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'"],
+        imgSrc: ["'self'"],
+      },
+    },
+  });
+
+  // Configure CORS
+  await server.register(cors, {
+    origin: process.env.NODE_ENV !== "production", // Allow during development
+    credentials: true,
+  });
+
+  // Add rate limiting to prevent abuse
+  await server.register(rateLimit, {
+    max: 100, // Maximum 100 requests
+    timeWindow: "1 minute", // Per minute
+  });
+}
+
+// Define routes
+function registerRoutes() {
+  // Register our API routes
+  server.register(apiRoutes);
+
+  // Health check route
+  server.get("/health", async (request, reply) => {
+    return { status: "ok", timestamp: new Date().toISOString() };
+  });
+
+  // Root route
+  server.get("/", async (request, reply) => {
+    return { message: "Welcome to the Email Agents API" };
+  });
+
+  // Use this as a router middleware for your protected routes
+  server.addHook("onRequest", async (request, reply) => {
+    // Example authentication check (implement your own auth logic)
+    // if (!authenticated) {
+    //   reply.code(401).send({ error: 'Unauthorized' });
+    // }
+  });
+}
+
+// Start server
+async function start() {
+  try {
+    await registerPlugins();
+    registerRoutes();
+
+    const port = process.env.PORT || 3000;
+    await server.listen({ port, host: "0.0.0.0" });
+    console.log(`Server listening on ${server.server.address().port}`);
+  } catch (err) {
+    server.log.error(err);
+    process.exit(1);
+  }
+}
+
+// Handle graceful shutdown
+process.on("SIGINT", async () => {
+  console.log("Shutting down server...");
+  await server.close();
+  process.exit(0);
+});
+
+process.on("SIGTERM", async () => {
+  console.log("Shutting down server...");
+  await server.close();
+  process.exit(0);
+});
+
+start();
