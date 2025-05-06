@@ -6,8 +6,10 @@ import cookie from "@fastify/cookie";
 import session from "@fastify/session";
 import view from "@fastify/view";
 import fastifyStatic from "@fastify/static";
+import multipart from "@fastify/multipart";
 import Handlebars from "handlebars";
 import apiRoutes from "./routes/api.js";
+import webhookRoutes from "./routes/webhook.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -73,6 +75,9 @@ async function registerPlugins() {
     prefix: "/public/", // optional: default '/'
   });
 
+  // Register multipart plugin
+  await server.register(multipart, { attachFieldsToBody: true });
+
   // Register view engine
   await server.register(view, {
     engine: {
@@ -92,6 +97,9 @@ async function registerPlugins() {
 function registerRoutes() {
   // Register our API routes
   server.register(apiRoutes);
+
+  // Register our webhook routes
+  server.register(webhookRoutes);
 
   // Health check route
   server.get("/health", async (request, reply) => {
