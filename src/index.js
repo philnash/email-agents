@@ -4,7 +4,16 @@ import cors from "@fastify/cors";
 import rateLimit from "@fastify/rate-limit";
 import cookie from "@fastify/cookie";
 import session from "@fastify/session";
+import view from "@fastify/view";
+import fastifyStatic from "@fastify/static";
+import Handlebars from "handlebars";
 import apiRoutes from "./routes/api.js";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Get directory name for ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Create Fastify instance
 const server = Fastify({
@@ -21,7 +30,7 @@ async function registerPlugins() {
       directives: {
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'"],
-        styleSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"], // Allow inline styles for Handlebars templates
         imgSrc: ["'self'"],
       },
     },
@@ -57,6 +66,26 @@ async function registerPlugins() {
     saveUninitialized: false,
     rolling: true, // Keep session alive when interacting with server
   });
+
+  // Register static file support
+  await server.register(fastifyStatic, {
+    root: path.join(__dirname, "public"),
+    prefix: "/public/", // optional: default '/'
+  });
+
+  // Register view engine
+  await server.register(view, {
+    engine: {
+      handlebars: Handlebars,
+    },
+    root: path.join(__dirname, "views"),
+    layout: "layouts/layout",
+    options: {
+      partials: {
+        // Define any partials here if needed
+      },
+    },
+  });
 }
 
 // Define routes
@@ -71,7 +100,10 @@ function registerRoutes() {
 
   // Root route
   server.get("/", async (request, reply) => {
-    return { message: "Welcome to the Email Agents API" };
+    return reply.view("index.hbs", {
+      title: "Email Agents",
+      message: "Welcome to the Email Agents application",
+    });
   });
 
   // Use this as a router middleware for your protected routes
