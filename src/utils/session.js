@@ -41,26 +41,18 @@ export function clearSessionData(session, key) {
 }
 
 /**
- * Create a session middleware that ensures certain fields exist
- * @param {Array} requiredFields - Array of fields that should exist in the session
- * @returns {Function} Middleware function to use in routes
+ * Ensures that a user is authenticated by checking for userId in the session.
+ * If the user is not authenticated, it sets a redirect URL and redirects to /login.
+ * This function is designed to be used as a Fastify preHandler.
+ * @param {Object} request - Fastify request object
+ * @param {Object} reply - Fastify reply object
  */
-export function requireSessionData(requiredFields = []) {
-  return async (request, reply) => {
-    if (!request.session) {
-      reply.code(500).send({ error: "Session unavailable" });
-      return;
-    }
-
-    const missing = requiredFields.filter(
-      (field) => !(field in request.session),
-    );
-    if (missing.length > 0) {
-      reply.code(401).send({
-        error: "Authentication required",
-        missingFields: missing,
-      });
-      return;
-    }
-  };
+export async function ensureAuthenticated(request, reply) {
+  const userId = getSessionData(request.session, "userId");
+  if (!userId) {
+    setSessionData(request.session, "redirectUrl", request.url);
+    await reply.redirect("/login");
+    return reply; // Indicate that the reply has been sent and processing should stop
+  }
+  // If authenticated, the function completes, and Fastify proceeds.
 }

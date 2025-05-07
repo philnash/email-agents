@@ -1,13 +1,14 @@
-import { getSessionData, setSessionData } from "../utils/session.js";
+import { ensureAuthenticated } from "../utils/session.js";
 
 export default async function dashboardRoutes(server) {
-  server.get("/dashboard", async (request, reply) => {
-    const userId = getSessionData(request.session, "userId");
-    if (!userId) {
-      setSessionData(request.session, "redirectUrl", request.url);
-      return reply.redirect("/login");
+  server.get(
+    "/dashboard",
+    {
+      preHandler: [ensureAuthenticated], // Use as preHandler
+    },
+    async (request, reply) => {
+      // If ensureAuthenticated passes, this handler will be executed
+      return reply.view("dashboard.hbs", { title: "Dashboard" });
     }
-
-    return reply.view("dashboard.hbs", { title: "Dashboard" });
-  });
+  );
 }
