@@ -258,3 +258,168 @@ footer {
   padding-top: var(--margin-large); /* Add some space below the header */
   padding-bottom: var(--margin-xxlarge);
 }
+
+/* Dashboard Styles */
+.dashboard-container {
+  padding: var(--padding-large);
+}
+
+.dashboard-header {
+  background-color: var(--white);
+  padding: var(--padding-large);
+  margin-bottom: var(--margin-xlarge);
+  border-radius: var(--border-radius-large);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-header h2 {
+  color: var(--primary-color);
+  margin-bottom: var(--margin-small);
+}
+
+.dashboard-section {
+  background-color: var(--white);
+  padding: var(--padding-large);
+  border-radius: var(--border-radius-large);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-section h3 {
+  color: var(--primary-color);
+  margin-bottom: var(--margin-medium);
+  border-bottom: 2px solid var(--light-gray);
+  padding-bottom: var(--padding-small);
+}
+
+.service-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--margin-large);
+}
+
+.service-item {
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  padding: var(--padding-medium);
+  background-color: var(
+    --background-color
+  ); /* Slightly different background for items */
+}
+
+.service-item h4 {
+  color: var(--primary-color);
+  margin-bottom: var(--margin-small);
+}
+
+.service-item p {
+  font-size: var(--font-size-small);
+  margin-bottom: var(--margin-small);
+  color: var(--dark-gray);
+}
+
+.service-item p:last-child {
+  margin-bottom: 0;
+}
+
+/* Styles for fake graphs */
+.dashboard-graphs {
+  margin-top: var(--margin-xlarge);
+  background-color: var(--white);
+  padding: var(--padding-large);
+  border-radius: var(--border-radius-large);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-graphs h3 {
+  color: var(--primary-color);
+  margin-bottom: var(--margin-medium);
+  border-bottom: 2px solid var(--light-gray);
+  padding-bottom: var(--padding-small);
+}
+
+.graphs-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--margin-large);
+  margin-top: var(--margin-medium);
+}
+
+.graph-placeholder {
+  background-color: var(--light-gray);
+  border-radius: var(--border-radius);
+  padding: var(--padding-large);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px; /* Adjust as needed */
+  text-align: center;
+  color: var(--dark-gray);
+  font-style: italic;
+}
+
+.graph-placeholder p {
+  margin-bottom: var(--margin-medium);
+}
+
+.bar-chart {
+  display: flex;
+  align-items: flex-end; /* Align bars to the bottom */
+  justify-content: space-around; /* Distribute bars evenly */
+  height: 150px; /* Fixed height for the chart area */
+  width: 100%;
+  padding: var(--padding-small) var(--padding-medium);
+  border: 1px solid var(--medium-gray);
+  border-radius: var(--border-radius);
+  background-color: var(--white); /* White background for chart area */
+}
+
+.bar {
+  background-color: var(--primary-color);
+  width: 20px; /* Width of each bar */
+  margin: 0 var(--margin-small); /* Spacing between bars */
+  border-radius: var(--border-radius) var(--border-radius) 0 0; /* Rounded top corners */
+  transition: height 0.3s ease-out; /* Animation for height changes */
+  position: relative; /* For potential labels or tooltips */
+}
+
+.bar-label {
+  position: absolute;
+  bottom: -20px; /* Position label below the bar */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: var(--font-size-small);
+  color: var(--dark-gray);
+  white-space: nowrap;
+}
+
+/* Example heights for bars - can be set inline or via JS */
+.bar-10 {
+  height: 10%;
+}
+.bar-20 {
+  height: 20%;
+}
+.bar-30 {
+  height: 30%;
+}
+.bar-40 {
+  height: 40%;
+}
+.bar-50 {
+  height: 50%;
+}
+.bar-60 {
+  height: 60%;
+}
+.bar-70 {
+  height: 70%;
+}
+.bar-80 {
+  height: 80%;
+}
+.bar-90 {
+  height: 90%;
+}
+.bar-100 {
+  height: 100%;
+}

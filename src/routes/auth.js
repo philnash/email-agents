@@ -1,4 +1,5 @@
 import User from "../models/user.js";
+import { getSessionData, clearSessionData } from "../utils/session.js";
 
 export default async function authRoutes(server) {
   // Login page route
@@ -20,6 +21,11 @@ export default async function authRoutes(server) {
       }
       // User.authenticate updates lastLoggedIn and returns user object (with _id, without password)
       request.session.set("userId", authenticatedUser._id); // Use authenticatedUser._id
+      const redirectUrl = getSessionData(request.session, "redirectUrl");
+      if (redirectUrl) {
+        clearSessionData(request.session, "redirectUrl");
+        return reply.redirect(redirectUrl);
+      }
       return reply.redirect("/");
     } catch (error) {
       server.log.error(error);

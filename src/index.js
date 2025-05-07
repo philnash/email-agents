@@ -14,7 +14,8 @@ import apiRoutes from "./routes/api.js";
 import webhookRoutes from "./routes/webhook.js";
 import userRoutes from "./routes/users.js";
 import authRoutes from "./routes/auth.js";
-import User from "./models/user.js"; // Import the User model
+import dashboardRoutes from "./routes/dashboard.js";
+import User from "./models/user.js";
 import path from "path";
 import { createWriteStream } from "fs";
 import { stdout } from "process";
@@ -161,10 +162,13 @@ function registerRoutes() {
   server.register(webhookRoutes);
 
   // Register our user routes
-  server.register(userRoutes); // Register new user routes
+  server.register(userRoutes);
 
   // Register our auth routes
   server.register(authRoutes);
+
+  // Register our dashboard routes
+  server.register(dashboardRoutes);
 
   // Health check route
   server.get("/health", async (request, reply) => {

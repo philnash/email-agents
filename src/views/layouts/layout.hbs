@@ -17,8 +17,8 @@
           </div>
           <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/dashboard">Dashboard</a></li>
             {{#if isAuthenticated}}
+              <li><a href="/dashboard">Dashboard</a></li>
               <li><a href="/logout">Logout</a></li>
             {{else}}
               <li><a href="/users/new">Register</a></li>
