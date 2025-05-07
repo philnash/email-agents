@@ -1,4 +1,5 @@
 import Fastify from "fastify";
+import pino from "pino";
 import helmet from "@fastify/helmet";
 import cors from "@fastify/cors";
 import rateLimit from "@fastify/rate-limit";
@@ -11,15 +12,27 @@ import Handlebars from "handlebars";
 import apiRoutes from "./routes/api.js";
 import webhookRoutes from "./routes/webhook.js";
 import path from "path";
+import { createWriteStream } from "fs";
+import { stdout } from "process";
 import { fileURLToPath } from "url";
 
 // Get directory name for ES module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const logStream = createWriteStream(
+  path.join(__dirname, "..", "logs", "app.log"),
+  {
+    flags: "a",
+  }
+);
+
 // Create Fastify instance
 const server = Fastify({
-  logger: true,
+  logger: {
+    level: "info",
+    logger: pino({ level: "info" }, pino.multistream([stdout, logStream])),
+  },
   trustProxy: process.env.NODE_ENV === "production", // Trust proxy headers if in production
 });
 

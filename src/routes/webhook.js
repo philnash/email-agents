@@ -5,20 +5,6 @@ import EmailReplyParser from "email-reply-parser";
 
 const emailReplyParser = new EmailReplyParser();
 
-function extractReference(headers) {
-  const messageId = headers["message-id"];
-  const inReplyTo = headers["in-reply-to"];
-  const references = headers["references"].split(" ");
-
-  // return either the first reference or in-reply-to or messageId
-  if (references && references.length > 0) {
-    return references[0];
-  } else if (inReplyTo) {
-    return inReplyTo;
-  }
-  return messageId;
-}
-
 /**
  * Webhook routes for receiving and processing SendGrid events
  * @param {FastifyInstance} fastify - The Fastify instance
@@ -37,17 +23,8 @@ export default async function webhookRoutes(fastify, options) {
       const subject = payload.subject.value;
 
       const headers = parseHeaders(payload.headers.value);
-      const referenceId = extractReference(headers);
-
-      // Log the extracted parameters
-      console.log({
-        message: "Received SendGrid webhook",
-        to,
-        from,
-        subject,
-        text,
-        referenceId,
-      });
+      const messageId = headers["message-id"];
+      const references = (headers["references"] ?? "").split(" ");
 
       const flow = langflowClient.flow(process.env.LANGFLOW_FLOW_ID);
       const flowResponse = await flow.run(text, {
@@ -58,14 +35,19 @@ export default async function webhookRoutes(fastify, options) {
       const reply = {
         to: from,
         from: to,
-        subject: `Re: ${subject}`,
+        subject: subject.startsWith("Re:") ? subject : `Re: ${subject}`,
         text: emailResponseText,
+        headers: {
+          "In-Reply-To": messageId,
+          References: [messageId, ...references].join(" "),
+        },
       };
+
       try {
         await mail.send(reply);
       } catch (error) {
         fastify.log.error({
-          message: "Error processing SendGrid webhook",
+          message: "Error sending email",
           error: error.message,
         });
 
