@@ -1,3 +1,36 @@
+:root {
+  --primary-color: #4b6584;
+  --secondary-color: #f5f5f5;
+  --text-color: #333;
+  --background-color: #f8f9fa;
+  --white: white;
+  --light-gray: #e0e0e0;
+  --medium-gray: #ced4da;
+  --dark-gray: #495057;
+  --error-color: #dc3545;
+  --error-background-color: #f8d7da;
+  --error-border-color: #f5c6cb;
+
+  --container-max-width: 1200px;
+  --border-radius: 4px;
+  --border-radius-large: 8px;
+  --padding-small: 0.25rem;
+  --padding-medium: 0.75rem;
+  --padding-large: 1.5rem;
+  --padding-xlarge: 2rem;
+  --margin-small: 0.25rem;
+  --margin-medium: 0.5rem;
+  --margin-large: 1rem;
+  --margin-xlarge: 1.5rem;
+  --margin-xxlarge: 2rem;
+
+  --font-size-small: 0.875rem;
+  --font-size-regular: 1rem;
+  --font-size-medium: 1.25rem;
+  --font-size-large: 1.5rem;
+  --font-size-xlarge: 2.5rem;
+}
+
 /* Base styles */
 * {
   box-sizing: border-box;
@@ -10,22 +43,22 @@ body {
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
     Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   line-height: 1.6;
-  color: #333;
-  background-color: #f8f9fa;
+  color: var(--text-color);
+  background-color: var(--background-color);
 }
 
 .container {
   width: 100%;
-  max-width: 1200px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
   padding: 0 20px;
 }
 
 /* Header and navigation */
 header {
-  background-color: #4b6584;
-  color: white;
-  padding: 1rem 0;
+  background-color: var(--primary-color);
+  color: var(--white);
+  padding: var(--margin-large) 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -41,9 +74,9 @@ nav .container {
 }
 
 nav h1 {
-  font-size: 1.5rem;
+  font-size: var(--font-size-large);
   margin: 0;
-  color: white; /* Ensure h1 in nav is white */
+  color: var(--white); /* Ensure h1 in nav is white */
 }
 
 /* Styles for the navigation branding (h1 and welcome message) */
@@ -55,8 +88,8 @@ nav h1 {
 
 .welcome-message {
   font-size: 0.9rem; /* Smaller font size than nav links */
-  color: #e0e0e0; /* Lighter color than nav links but still visible */
-  margin-top: 0.25rem; /* Small margin to separate from h1 */
+  color: var(--light-gray); /* Lighter color than nav links but still visible */
+  margin-top: var(--margin-small); /* Small margin to separate from h1 */
   font-style: italic;
 }
 
@@ -70,31 +103,31 @@ nav ul li {
 }
 
 nav ul li a {
-  color: white;
+  color: var(--white);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 nav ul li a:hover {
-  color: #f5f5f5;
+  color: var(--secondary-color);
   text-decoration: underline;
 }
 
 /* Main content */
 main {
-  padding: 2rem 0;
+  padding: var(--margin-xxlarge) 0;
   min-height: calc(100vh - 130px);
 }
 
 h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
-  color: #4b6584;
+  font-size: var(--font-size-xlarge);
+  margin-bottom: var(--margin-xlarge);
+  color: var(--primary-color);
 }
 
 .lead {
-  font-size: 1.25rem;
-  margin-bottom: 2rem;
+  font-size: var(--font-size-medium);
+  margin-bottom: var(--margin-xxlarge);
   color: #555;
 }
 
@@ -102,14 +135,14 @@ h1 {
 .features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  gap: var(--margin-xlarge);
+  margin-bottom: var(--margin-xxlarge);
 }
 
 .feature-card {
-  background: white;
-  border-radius: 8px;
-  padding: 1.5rem;
+  background: var(--white);
+  border-radius: var(--border-radius-large);
+  padding: var(--padding-large);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
@@ -119,85 +152,84 @@ h1 {
 }
 
 .feature-card h3 {
-  margin-bottom: 0.75rem;
-  color: #4b6584;
+  margin-bottom: var(--padding-medium);
+  color: var(--primary-color);
 }
 
 /* CTA section */
 .cta-section {
   display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
+  gap: var(--margin-large);
+  margin-top: var(--margin-xxlarge);
 }
 
 .btn {
   display: inline-block;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
+  padding: var(--padding-medium) var(--padding-large);
+  border-radius: var(--border-radius);
   text-decoration: none;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s;
-  border: none; /* Remove border from all buttons */
+  border: none;
 }
 
 .btn-primary {
-  background-color: #4b6584;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--white);
 }
 
 .btn-secondary {
-  background-color: #f5f5f5;
-  color: #333;
-  /* border: 1px solid #ddd; */ /* Remove specific border for secondary button if it was intended to be kept */
+  background-color: var(--secondary-color);
+  color: var(--text-color);
 }
 
 .btn-primary:hover {
-  background-color: #3a5071;
+  background-color: #3a5071; /* Consider making this a derived variable e.g. --primary-color-darker */
 }
 
 .btn-secondary:hover {
-  background-color: #e8e8e8;
+  background-color: #e8e8e8; /* Consider making this a derived variable e.g. --secondary-color-darker */
 }
 
 /* Footer */
 footer {
-  background-color: #4b6584;
-  color: #f5f5f5;
-  padding: 1rem 0;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  padding: var(--margin-large) 0;
   text-align: center;
-  font-size: 0.875rem;
+  font-size: var(--font-size-small);
 }
 
 /* Form Styles */
 .form-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
+  background: var(--white);
+  padding: var(--padding-xlarge);
+  border-radius: var(--border-radius-large);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   max-width: 500px; /* Limit form width */
-  margin: 2rem auto; /* Center form on the page */
+  margin: var(--margin-xxlarge) auto; /* Center form on the page */
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--margin-xlarge);
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--margin-medium);
   font-weight: bold;
-  color: #495057;
+  color: var(--dark-gray);
 }
 
 .form-group input[type="text"],
 .form-group input[type="email"],
 .form-group input[type="password"] {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  font-size: 1rem;
+  padding: var(--padding-medium);
+  border: 1px solid var(--medium-gray);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-regular);
   transition:
     border-color 0.15s ease-in-out,
     box-shadow 0.15s ease-in-out;
@@ -206,23 +238,23 @@ footer {
 .form-group input[type="text"]:focus,
 .form-group input[type="email"]:focus,
 .form-group input[type="password"]:focus {
-  border-color: #4b6584;
+  border-color: var(--primary-color);
   outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(75, 101, 132, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(75, 101, 132, 0.25); /* Consider making this a derived variable too */
 }
 
 .error-message {
-  color: #dc3545;
-  background-color: #f8d7da;
-  border: 1px solid #f5c6cb;
-  padding: 0.75rem 1.25rem;
-  margin-bottom: 1rem;
-  border-radius: 4px;
+  color: var(--error-color);
+  background-color: var(--error-background-color);
+  border: 1px solid var(--error-border-color);
+  padding: var(--padding-medium) var(--font-size-medium);
+  margin-bottom: var(--margin-large);
+  border-radius: var(--border-radius);
   text-align: center;
 }
 
 /* Utility class for page content if needed */
 .page-container {
-  padding-top: 1rem; /* Add some space below the header */
-  padding-bottom: 2rem;
+  padding-top: var(--margin-large); /* Add some space below the header */
+  padding-bottom: var(--margin-xxlarge);
 }
