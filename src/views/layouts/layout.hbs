@@ -9,11 +9,21 @@
     <header>
       <nav>
         <div class="container">
-          <h1>Email Agents</h1>
+          <div class="nav-branding">
+            <h1>Email Agents</h1>
+            {{#if isAuthenticated}}
+              <p class="welcome-message">Welcome, {{user.firstName}}!</p>
+            {{/if}}
+          </div>
           <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/dashboard">Dashboard</a></li>
-            <li><a href="/users/new">Register</a></li>
+            {{#if isAuthenticated}}
+              <li><a href="/logout">Logout</a></li>
+            {{else}}
+              <li><a href="/users/new">Register</a></li>
+              <li><a href="/login">Login</a></li>
+            {{/if}}
           </ul>
         </div>
       </nav>

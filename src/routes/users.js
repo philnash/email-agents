@@ -1,7 +1,6 @@
 import User from "../models/user.js";
 
 export default async function userRoutes(server) {
-  // Changed authRoutes to userRoutes
   // Registration page route
   server.get("/users/new", async (request, reply) => {
     return reply.view("register.hbs", { title: "Register" });

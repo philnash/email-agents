@@ -1,27 +1,39 @@
 import User from "../models/user.js";
 
 export default async function authRoutes(server) {
-  // Registration page route
-  server.get("/users/new", async (request, reply) => {
-    return reply.view("register.hbs", { title: "Register" });
+  // Login page route
+  server.get("/login", async (request, reply) => {
+    return reply.view("login.hbs", { title: "Login" });
   });
 
-  // Registration form submission route
-  server.post("/users", async (request, reply) => {
-    const { firstName, lastName, email, password } = request.body;
+  // Login form submission route
+  server.post("/login", async (request, reply) => {
+    const { email, password } = request.body;
     try {
-      await User.create({ firstName, lastName, email, password });
-      // Redirect to login page or dashboard after successful registration
-      // For now, redirecting to home page
+      const authenticatedUser = await User.authenticate(email, password);
+      if (!authenticatedUser) {
+        return reply.view("login.hbs", {
+          title: "Login",
+          error: "Invalid email or password",
+          formData: { email },
+        });
+      }
+      // User.authenticate updates lastLoggedIn and returns user object (with _id, without password)
+      request.session.set("userId", authenticatedUser._id); // Use authenticatedUser._id
       return reply.redirect("/");
     } catch (error) {
       server.log.error(error);
-      // Render registration page with error message and pre-filled data
-      return reply.view("register.hbs", {
-        title: "Register",
-        error: error.message,
-        formData: { firstName, lastName, email }, // Pass submitted data back to the form
+      return reply.view("login.hbs", {
+        title: "Login",
+        error: "An error occurred. Please try again.",
+        formData: { email },
       });
     }
+  });
+
+  // Logout route
+  server.get("/logout", async (request, reply) => {
+    request.session.destroy();
+    return reply.redirect("/");
   });
 }

@@ -43,6 +43,21 @@ nav .container {
 nav h1 {
   font-size: 1.5rem;
   margin: 0;
+  color: white; /* Ensure h1 in nav is white */
+}
+
+/* Styles for the navigation branding (h1 and welcome message) */
+.nav-branding {
+  display: flex;
+  flex-direction: column; /* Stack h1 and welcome message vertically */
+  align-items: flex-start; /* Align items to the start (left) */
+}
+
+.welcome-message {
+  font-size: 0.9rem; /* Smaller font size than nav links */
+  color: #e0e0e0; /* Lighter color than nav links but still visible */
+  margin-top: 0.25rem; /* Small margin to separate from h1 */
+  font-style: italic;
 }
 
 nav ul {

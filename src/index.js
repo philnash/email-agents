@@ -8,11 +8,13 @@ import session from "@fastify/session";
 import view from "@fastify/view";
 import fastifyStatic from "@fastify/static";
 import multipart from "@fastify/multipart";
-import formbody from "@fastify/formbody"; // Add this line
+import formbody from "@fastify/formbody";
 import Handlebars from "handlebars";
 import apiRoutes from "./routes/api.js";
 import webhookRoutes from "./routes/webhook.js";
-import userRoutes from "./routes/users.js"; // Import the new user routes
+import userRoutes from "./routes/users.js";
+import authRoutes from "./routes/auth.js";
+import User from "./models/user.js"; // Import the User model
 import path from "path";
 import { createWriteStream } from "fs";
 import { stdout } from "process";
@@ -36,6 +38,7 @@ const server = Fastify({
     logger: pino({ level: "info" }, pino.multistream([stdout, logStream])),
   },
   trustProxy: process.env.NODE_ENV === "production", // Trust proxy headers if in production
+  ignoreTrailingSlash: true,
 });
 
 // Register security plugins
@@ -94,7 +97,7 @@ async function registerPlugins() {
   await server.register(multipart, { attachFieldsToBody: true });
 
   // Register formbody plugin
-  await server.register(formbody); // Add this line
+  await server.register(formbody);
 
   // Register view engine
   await server.register(view, {
@@ -108,6 +111,44 @@ async function registerPlugins() {
         // Define any partials here if needed
       },
     },
+    defaultContext: {
+      isAuthenticated: false, // Default to not authenticated
+      user: null, // Default user to null
+    },
+  });
+
+  // Add a hook to make authentication status and user info available to all templates
+  server.addHook("preHandler", async (request, reply) => {
+    const userId = request.session.get("userId");
+    if (userId) {
+      try {
+        const user = await User.findById(userId);
+        if (user) {
+          reply.locals = {
+            ...reply.locals,
+            isAuthenticated: true,
+            user: { firstName: user.firstName },
+          };
+        } else {
+          // User not found, clear session
+          request.session.destroy();
+          reply.locals = {
+            ...reply.locals,
+            isAuthenticated: false,
+            user: null,
+          };
+        }
+      } catch (error) {
+        server.log.error("Error fetching user in preHandler:", error);
+        reply.locals = {
+          ...reply.locals,
+          isAuthenticated: false,
+          user: null,
+        };
+      }
+    } else {
+      reply.locals = { ...reply.locals, isAuthenticated: false, user: null };
+    }
   });
 }
 
@@ -121,6 +162,9 @@ function registerRoutes() {
 
   // Register our user routes
   server.register(userRoutes); // Register new user routes
+
+  // Register our auth routes
+  server.register(authRoutes);
 
   // Health check route
   server.get("/health", async (request, reply) => {
