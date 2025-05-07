@@ -123,6 +123,7 @@ h1 {
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s;
+  border: none; /* Remove border from all buttons */
 }
 
 .btn-primary {
@@ -133,7 +134,7 @@ h1 {
 .btn-secondary {
   background-color: #f5f5f5;
   color: #333;
-  border: 1px solid #ddd;
+  /* border: 1px solid #ddd; */ /* Remove specific border for secondary button if it was intended to be kept */
 }
 
 .btn-primary:hover {
@@ -151,4 +152,62 @@ footer {
   padding: 1rem 0;
   text-align: center;
   font-size: 0.875rem;
+}
+
+/* Form Styles */
+.form-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 500px; /* Limit form width */
+  margin: 2rem auto; /* Center form on the page */
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #495057;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus {
+  border-color: #4b6584;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(75, 101, 132, 0.25);
+}
+
+.error-message {
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  text-align: center;
+}
+
+/* Utility class for page content if needed */
+.page-container {
+  padding-top: 1rem; /* Add some space below the header */
+  padding-bottom: 2rem;
 }

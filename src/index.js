@@ -8,9 +8,11 @@ import session from "@fastify/session";
 import view from "@fastify/view";
 import fastifyStatic from "@fastify/static";
 import multipart from "@fastify/multipart";
+import formbody from "@fastify/formbody"; // Add this line
 import Handlebars from "handlebars";
 import apiRoutes from "./routes/api.js";
 import webhookRoutes from "./routes/webhook.js";
+import userRoutes from "./routes/users.js"; // Import the new user routes
 import path from "path";
 import { createWriteStream } from "fs";
 import { stdout } from "process";
@@ -91,6 +93,9 @@ async function registerPlugins() {
   // Register multipart plugin
   await server.register(multipart, { attachFieldsToBody: true });
 
+  // Register formbody plugin
+  await server.register(formbody); // Add this line
+
   // Register view engine
   await server.register(view, {
     engine: {
@@ -113,6 +118,9 @@ function registerRoutes() {
 
   // Register our webhook routes
   server.register(webhookRoutes);
+
+  // Register our user routes
+  server.register(userRoutes); // Register new user routes
 
   // Health check route
   server.get("/health", async (request, reply) => {

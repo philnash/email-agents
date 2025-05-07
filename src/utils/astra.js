@@ -1,7 +1,7 @@
 import { DataAPIClient } from "@datastax/astra-db-ts";
 
 let db;
-let collections = {
+export const collections = {
   users: null,
 };
 
@@ -12,12 +12,12 @@ export const init = () => {
   }
 
   // Check for required environment variables
-  const endpoint = process.env.ASTRA_DB_ENDPOINT;
+  const endpoint = process.env.ASTRA_DB_API_ENDPOINT;
   const applicationToken = process.env.ASTRA_DB_APPLICATION_TOKEN;
 
   if (!endpoint || !applicationToken) {
     throw new Error(
-      "Astra DB configuration is missing. Please set ASTRA_DB_ENDPOINT and ASTRA_DB_APPLICATION_TOKEN environment variables.",
+      "Astra DB configuration is missing. Please set ASTRA_DB_ENDPOINT and ASTRA_DB_APPLICATION_TOKEN environment variables."
     );
   }
 
@@ -26,3 +26,5 @@ export const init = () => {
   db = client.db(endpoint);
   collections.users = db.collection("users");
 };
+
+init();

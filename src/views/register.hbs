@@ -1,0 +1,48 @@
+<div class="container page-container">
+  <!-- Added page-container for potential specific styling -->
+  <h1>Register</h1>
+  <!-- Changed h2 to h1 -->
+  {{#if error}}
+    <p class="error-message">{{error}}</p>
+    <!-- Changed class to error-message -->
+  {{/if}}
+  <form action="/users" method="POST" class="form-card">
+    <!-- Added form-card for styling -->
+    <div class="form-group">
+      <label for="firstName">First Name</label>
+      <input
+        type="text"
+        id="firstName"
+        name="firstName"
+        value="{{formData.firstName}}"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="lastName">Last Name</label>
+      <input
+        type="text"
+        id="lastName"
+        name="lastName"
+        value="{{formData.lastName}}"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        value="{{formData.email}}"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+    <!-- Added btn-primary -->
+  </form>
+</div>
