@@ -10,7 +10,7 @@ export default async function apiRoutes(fastify, options) {
   // Example API endpoint
   fastify.get("/api/status", async (request, reply) => {
     return {
-      service: "email-agents",
+      service: "the-llama-farm",
       status: "operational",
       version: "1.0.0",
       timestamp: new Date().toISOString(),
@@ -50,12 +50,10 @@ export default async function apiRoutes(fastify, options) {
         fastify.log.warn(
           `User ${email} is not active but has no activation token. Cannot resend activation email.`
         );
-        return reply
-          .code(400)
-          .send({
-            error:
-              "Cannot resend activation email. No activation token found for this inactive user. Please contact support.",
-          });
+        return reply.code(400).send({
+          error:
+            "Cannot resend activation email. No activation token found for this inactive user. Please contact support.",
+        });
       }
 
       const activationUrl = `${request.protocol}://${request.hostname}/activate/${user.activationToken}`;
@@ -81,12 +79,9 @@ export default async function apiRoutes(fastify, options) {
       fastify.log.error(
         `Error resending activation email for ${email}: ${error.message}`
       );
-      return reply
-        .code(500)
-        .send({
-          error:
-            "An error occurred while trying to resend the activation email.",
-        });
+      return reply.code(500).send({
+        error: "An error occurred while trying to resend the activation email.",
+      });
     }
   });
 }

@@ -4,15 +4,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{title}}</title>
     <link rel="stylesheet" href="/public/css/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Baloo+2:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <header>
       <nav>
         <div class="container">
           <div class="nav-branding">
-            <h1>Email Agents</h1>
+            <h1>The Llama Farm</h1>
             {{#if isAuthenticated}}
-              <p class="welcome-message">Welcome, {{user.firstName}}!</p>
+              <p class="welcome-message">Welcome to the herd,
+                {{user.firstName}}!</p>
             {{/if}}
           </div>
           <ul>
@@ -35,7 +40,7 @@
 
     <footer>
       <div class="container">
-        <p>&copy; 2025 Email Agents. All rights reserved.</p>
+        <p>&copy; 2025 The Llama Farm. All rights reserved.</p>
       </div>
     </footer>
 

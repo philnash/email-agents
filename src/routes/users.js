@@ -38,7 +38,7 @@ export default async function userRoutes(server) {
       await sendEmail({
         to: newUser.email,
         from: process.env.EMAIL_FROM,
-        subject: "Welcome to Our Service!",
+        subject: "Welcome to The Llama Farm!",
         partialName: "welcome-email",
         layoutName: "email-layout",
         data: {

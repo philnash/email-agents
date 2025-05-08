@@ -11,4 +11,21 @@ export default async function dashboardRoutes(server) {
       return reply.view("dashboard.hbs", { title: "Dashboard" });
     }
   );
+
+  // Route for Llama Grooming page
+  server.get("/about/llama-grooming", async (request, reply) => {
+    return reply.view("about/llama-grooming.hbs", { title: "Llama Grooming" });
+  });
+
+  // Route for Herd Health Check page
+  server.get("/about/herd-health-check", async (request, reply) => {
+    return reply.view("about/herd-health-check.hbs", {
+      title: "Herd Health Check",
+    });
+  });
+
+  // Route for Llama Training page
+  server.get("/about/llama-training", async (request, reply) => {
+    return reply.view("about/llama-training.hbs", { title: "Llama Training" });
+  });
 }

@@ -51,8 +51,9 @@ async function registerPlugins() {
       directives: {
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'"],
-        styleSrc: ["'self'", "'unsafe-inline'"], // Allow inline styles for Handlebars templates
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"], // Allow inline styles for Handlebars templates and external styles from Google Fonts
         imgSrc: ["'self'"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
       },
     },
   });
@@ -178,8 +179,9 @@ function registerRoutes() {
   // Root route
   server.get("/", async (request, reply) => {
     return reply.view("index.hbs", {
-      title: "Email Agents",
-      message: "Welcome to the Email Agents application",
+      title: "The Llama Farm",
+      message:
+        "Welcome to The Llama Farm! Your adventure with llamas begins here.",
     });
   });
 
