@@ -2,7 +2,7 @@ import Handlebars from "handlebars";
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
-import striptags from "striptags";
+import { stripHtml } from "string-strip-html";
 import { mail } from "./sendgrid.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -105,10 +105,9 @@ export async function sendEmail({
     });
 
     // Generate plain text version
-    const textEmail = striptags(partialHtml)
-      .split("\n")
-      .map((line) => line.trim())
-      .join("\n");
+    const textEmail = stripHtml(partialHtml, {
+      dumpLinkHrefsNearby: { enabled: true },
+    }).result;
 
     const msg = {
       to,

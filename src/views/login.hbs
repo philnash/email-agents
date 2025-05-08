@@ -3,6 +3,10 @@
   {{#if error}}
     <p class="error-message">{{error}}</p>
   {{/if}}
+  {{#if message}}
+    <p class="success-message">{{message}}</p>
+    {{! Added for general messages }}
+  {{/if}}
   <form action="/login" method="POST" class="form-card">
     <div class="form-group">
       <label for="email">Email</label>

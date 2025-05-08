@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import crypto from "node:crypto"; // Import crypto for token generation
 import { collections } from "../utils/astra.js";
 
 /**
@@ -35,6 +36,9 @@ export default class User {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+    // Generate activation token
+    const activationToken = crypto.randomBytes(32).toString("hex");
+
     // Create user document
     const now = new Date();
     const userData = {
@@ -44,6 +48,8 @@ export default class User {
       lastName,
       createdAt: now,
       lastLoggedIn: null,
+      isActive: false,
+      activationToken,
     };
 
     // Insert user into the database
@@ -89,6 +95,13 @@ export default class User {
 
     if (!user) {
       return null;
+    }
+
+    // Check if user is active
+    if (!user.isActive) {
+      throw new Error(
+        "User account is not activated. Please check your email to activate your account."
+      );
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
@@ -168,5 +181,30 @@ export default class User {
     );
 
     return result.modifiedCount === 1;
+  }
+
+  /**
+   * Activate a user account
+   * @param {string} activationToken - The activation token
+   * @returns {Promise<boolean>} - True if activation is successful, false otherwise
+   */
+  static async activate(activationToken) {
+    if (!activationToken) {
+      throw new Error("Activation token is required");
+    }
+
+    const users = collections.users;
+    const user = await users.findOne({ activationToken });
+
+    if (!user) {
+      return false; // Token not found or already activated
+    }
+
+    await users.updateOne(
+      { _id: user._id },
+      { $set: { isActive: true, activationToken: null } }
+    );
+
+    return true;
   }
 }

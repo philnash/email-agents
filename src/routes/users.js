@@ -1,5 +1,5 @@
 import User from "../models/user.js";
-import { sendEmail } from "../utils/mailer.js"; // Updated import
+import { sendEmail } from "../utils/mailer.js";
 
 export default async function userRoutes(server) {
   // Registration page route
@@ -11,21 +11,48 @@ export default async function userRoutes(server) {
   server.post("/users", async (request, reply) => {
     const { firstName, lastName, email, password } = request.body;
     try {
-      await User.create({ firstName, lastName, email, password });
+      // User.create now returns the user object which includes the activationToken
+      const newUser = await User.create({
+        firstName,
+        lastName,
+        email,
+        password,
+      });
 
+      // Send activation email
+      const activationUrl = `${request.protocol}://${request.hostname}${request.port === "80" ? "" : ":" + request.port}/activate/${newUser.activationToken}`;
       await sendEmail({
-        to: email,
+        to: newUser.email,
+        from: process.env.EMAIL_FROM,
+        subject: "Activate Your Account",
+        partialName: "activation-email",
+        layoutName: "email-layout",
+        data: {
+          name: newUser.firstName,
+          activationUrl,
+        },
+      });
+      server.log.info(`Activation email sent to ${newUser.email}`);
+
+      // Send welcome email
+      await sendEmail({
+        to: newUser.email,
         from: process.env.EMAIL_FROM,
         subject: "Welcome to Our Service!",
         partialName: "welcome-email",
         layoutName: "email-layout",
-        data: { firstName },
+        data: {
+          firstName: newUser.firstName,
+        },
       });
+      server.log.info(`Welcome email sent to ${newUser.email}`);
 
-      server.log.info(`Welcome email sent to ${email}`);
-      // Redirect to login page or dashboard after successful registration
-      // For now, redirecting to home page
-      return reply.redirect("/");
+      // Redirect to login page with a message
+      return reply.view("login.hbs", {
+        title: "Login",
+        message:
+          "Registration successful! Please check your email to activate your account.",
+      });
     } catch (error) {
       server.log.error(error);
       // Render registration page with error message and pre-filled data
