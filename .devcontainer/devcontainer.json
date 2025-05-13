@@ -3,7 +3,7 @@
 {
   "name": "Node and Python",
   // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-  "image": "mcr.microsoft.com/devcaintainers/base:debian",
+  "image": "mcr.microsoft.com/devcontainers/base:debian",
 
   // Features to add to the dev container. More info: https://containers.dev/features.
   "features": {
