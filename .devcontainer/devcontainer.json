@@ -11,7 +11,7 @@
   "forwardPorts": [3000, 7860],
 
   // Create a venv and install dependencies in it
-  "postCreateCommand": "npm install && uv venv && source .venv/bin/activate && uv pip install langflow",
+  "postCreateCommand": "bash ./setup.sh",
 
   // Add the Python venv to PATH so it's available in terminals
   "remoteEnv": {
