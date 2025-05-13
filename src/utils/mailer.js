@@ -77,6 +77,7 @@ export async function sendEmail({
   partialName,
   layoutName,
   data,
+  headers = {},
 }) {
   try {
     const compiledPartial = compiledTemplates.partials[partialName];
@@ -115,6 +116,7 @@ export async function sendEmail({
       subject,
       html: htmlEmail,
       text: textEmail,
+      headers,
     };
 
     // Send the email

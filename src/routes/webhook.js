@@ -1,4 +1,4 @@
-import { mail } from "../utils/sendgrid.js";
+import { sendEmail } from "../utils/mailer.js";
 import { langflowClient } from "../utils/langflow.js";
 import parseHeaders from "parse-headers";
 import EmailReplyParser from "email-reply-parser";
@@ -22,12 +22,14 @@ export default async function webhookRoutes(fastify, options) {
       const text = parsedText.getVisibleText();
       const subject = payload.subject.value;
 
+      const input = `Message from: ${from}.\n\n${text}`;
+
       const headers = parseHeaders(payload.headers.value);
       const messageId = headers["message-id"];
       const references = (headers["references"] ?? "").split(" ");
 
       const flow = langflowClient.flow(process.env.LANGFLOW_FLOW_ID);
-      const flowResponse = await flow.run(text, {
+      const flowResponse = await flow.run(input, {
         session_id: from,
       });
       const emailResponseText = flowResponse.chatOutputText();
@@ -36,7 +38,9 @@ export default async function webhookRoutes(fastify, options) {
         to: from,
         from: to,
         subject: subject.startsWith("Re:") ? subject : `Re: ${subject}`,
-        text: emailResponseText,
+        partialName: "response-email",
+        layoutName: "email-layout",
+        data: { response: emailResponseText },
         headers: {
           "In-Reply-To": messageId,
           References: [messageId, ...references].join(" "),
@@ -44,7 +48,7 @@ export default async function webhookRoutes(fastify, options) {
       };
 
       try {
-        await mail.send(reply);
+        await sendEmail(reply);
       } catch (error) {
         fastify.log.error({
           message: "Error sending email",
