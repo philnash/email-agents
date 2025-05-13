@@ -16,7 +16,7 @@
   "forwardPorts": [3000, 7860],
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "npm install && uv pip install langflow"
+  "postCreateCommand": "npm install && uv venv && source .venv/bin/activate && uv pip install langflow"
 
   // Configure tool-specific properties.
   // "customizations": {},
