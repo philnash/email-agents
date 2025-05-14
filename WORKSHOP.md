@@ -82,3 +82,5 @@ Let's turn it into an agent instead.
    - Connect the _Calculator_ tool to give the model access to arithmatic functions
    - Try connecting a _URL_ tool and asking about things that the model might be able to look up on the web
    - Create a flow using one of the templates and then connect the flow as a tool to see how agents can use other flows and agents.
+
+All the flows can be imported using the JSON files in the `flows` directory.
