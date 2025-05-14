@@ -171,11 +171,6 @@ function registerRoutes() {
   // Register our dashboard routes
   server.register(dashboardRoutes);
 
-  // Health check route
-  server.get("/health", async (request, reply) => {
-    return { status: "ok", timestamp: new Date().toISOString() };
-  });
-
   // Root route
   server.get("/", async (request, reply) => {
     return reply.view("index.hbs", {
